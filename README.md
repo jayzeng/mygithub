@@ -13,27 +13,35 @@ If you already have a GitHub API token, you can set it as environment variable.
 export GITHUB_API_TOKEN=<my-token>
 ```
 
-
 ```bash
-usage: git_publish.py [-h] -b BODY -t TITLE [--base BASE]
+[jayzeng] ~/Projects/mygithub] (refactor)>  python gitpublish.py --help
+usage: gitpublish.py [-h] [-b BODY] [-t TITLE] [--base BASE_BRANCH]
+                      [--in-browser IN_BROWSER]
 
 optional arguments:
   -h, --help            show this help message and exit
   -b BODY, --body BODY  Pull request body (in markdown)
   -t TITLE, --title TITLE
                         Pull request title
-  --base BASE           Base branch
+  --base BASE_BRANCH    Base branch
+  --in-browser IN_BROWSER
+                        Open created pull request in browser
 ```
 
 ## Example
 To create a new pull request
 ```bash
-python git_publish.py -t 'gitignore' -b '## Check in gitignore'
+python gitpublish.py -t 'gitignore' -b '## Check in gitignore'
 ```
 
-If a pull request already exists, you may omit the arguments and it will push the new commits to the pending pull:
+You may choose not to open created pull request in browser
 ```bash
-[jayzeng] ~/Projects/mygithub] (prototype/publish)>  python git_publish.py
+python gitpublish.py -t 'gitignore' -b '## Check in gitignore' --in-browser n
+```
+
+If a pull request already exists, you can omit the arguments. It will push the new commits to the pending pull:
+```bash
+[jayzeng] ~/Projects/mygithub] (prototype/publish)>  python gitpublish.py
 pushed to remote origin (git@github.com:jayzeng/mygithub.git)
 A pull request already exists for <Head [jayzeng:prototype/publish]>.
 url: https://github.com/jayzeng/mygithub/issues/2

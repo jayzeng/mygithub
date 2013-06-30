@@ -25,9 +25,6 @@ class GitHubApiAuth(object):
             if 'GITHUB' in key.upper():
                 return local_env[key]
 
-        # Look in config
-        # To be implemented
-
         raise Exception('Please set GitHub API key (GITHUB_API_TOKEN) '\
                         'in environment or config')
 
@@ -51,6 +48,11 @@ class LocalRepo(object):
 
 class Publish(object):
     def __init__(self, repo, current_branch):
+        """
+        Args:
+        repo  - gitpython.Repo local Repo instance
+        current_branch - current git branch
+        """
         self.repo = repo
         self.current_branch = current_branch
 
@@ -61,7 +63,8 @@ class Publish(object):
         parser = argparse.ArgumentParser()
         parser.add_argument('-b', '--body', help='Pull request body (in markdown)', dest='body')
         parser.add_argument('-t', '--title', help='Pull request title', dest='title')
-        parser.add_argument('--base', help='Base branch', dest='base', default='master')
+        parser.add_argument('--base', help='Base branch', dest='base_branch', default='master')
+        parser.add_argument('--in-browser', help='Open created pull request in browser', dest='in_browser', default='y')
 
         return parser.parse_args()
 
@@ -87,6 +90,8 @@ class Publish(object):
 
     def get_remote_info(self):
         remote_info = {}
+        # @TODO This assumes user name is a substring of GitHub handle
+        # Need to cover case like jay.zeng in local username
         login_name = os.getlogin()
 
         for remote in self.repo.remotes:
@@ -100,18 +105,20 @@ class Publish(object):
         return remote_info
 
     def update_remote(self, origin_remote):
+        """
+        Arg
+        origin_remote - your own remote (remote matched your username)
+        """
         return origin_remote.push(self.current_branch)
 
-    def create_pull(self, token, repo_name, title, body, base_branch):
+    def create_pull(self, token, repo_name, cmd_args):
         """
         Creates a pull request on GitHub
 
         Args:
             token        - github api token
             repo_name    - local repository name
-            title        - pull request title
-            body         - pull request body (string or markdown)
-            base_branch  - base branch, default to master
+            cmd_args     - command line arguments
         Returns created pull request url
         """
         github_login = login(token=token)
@@ -140,17 +147,19 @@ class Publish(object):
 
                 # no pending pull requests
                 try:
-                    if not (title and body and base_branch):
+                    if not (cmd_args.title and cmd_args.body and cmd_args.base_branch):
                         sys.exit('Missing required arguments to create a pull request (title, body or base_branch)')
 
-                    created_pull = my_repo.create_pull(title, base_branch, self.current_branch, body=body)
+                    created_pull = my_repo.create_pull(cmd_args.title, cmd_args.base_branch,
+                                                       self.current_branch, body=cmd_args.body)
 
-                    # created a pull request, returns url
+                    # created a pull request, returns html url
                     if created_pull:
-                        # open up pull request in browser
-                        # @TODO add an option flag
                         html_url = created_pull.html_url
-                        subprocess.Popen(['open', html_url])
+
+                        # Open in browser?
+                        if cmd_args.in_browser.lower() == 'y':
+                            subprocess.Popen(['open', html_url])
                         return html_url
                 except Exception,e:
                     if hasattr(e, 'errors'):
@@ -181,8 +190,7 @@ def main():
     publish.update_remote(remote_info['remote_name'])
     print('pushed to remote %s (%s)' % (remote_info['remote_name'], remote_info['remote_url']))
 
-    print(publish.create_pull(api_token, remote_info['repo_name'],
-                              publish_args.title, publish_args.body, publish_args.base))
+    print(publish.create_pull(api_token, remote_info['repo_name'], publish_args))
 
 if __name__ == "__main__":
     main()
