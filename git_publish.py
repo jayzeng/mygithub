@@ -1,5 +1,5 @@
 from github3 import login
-from git import *
+from git import Repo, GitDB
 
 import os
 import sys
@@ -7,14 +7,17 @@ import subprocess
 import argparse
 
 class GitHubApiAuth(object):
-    """
-    Search for GitHub API token or password
-    From either env or config
-    """
     def get_token(self):
+        """
+        Search for GitHub API token or password
+        From either env or config
+        """
         return self._find_key()
 
     def _find_key(self):
+        """
+        Locates api token from environment and/or local config
+        """
         local_env = os.environ
 
         # Search for github keyword
@@ -23,6 +26,7 @@ class GitHubApiAuth(object):
                 return local_env[key]
 
         # Look in config
+        # To be implemented
 
         raise Exception('Please set GitHub API key (GITHUB_API_TOKEN) '\
                         'in environment or config')
@@ -57,7 +61,7 @@ class Publish(object):
         parser = argparse.ArgumentParser()
         parser.add_argument('-b', '--body', help='Pull request body (in markdown)', dest='body')
         parser.add_argument('-t', '--title', help='Pull request title', dest='title')
-        parser.add_argument('--base', help='Base branch', dest='base',default='master')
+        parser.add_argument('--base', help='Base branch', dest='base', default='master')
 
         return parser.parse_args()
 
@@ -110,10 +114,10 @@ class Publish(object):
             base_branch  - base branch, default to master
         Returns created pull request url
         """
-        gh = login(token=token)
+        github_login = login(token=token)
 
         # @TODO check github3.py to do a get repo instead of looping all repos
-        repos = gh.iter_repos()
+        repos = github_login.iter_repos()
 
         for my_repo in repos:
             if repo_name == my_repo.name:
@@ -136,6 +140,9 @@ class Publish(object):
 
                 # no pending pull requests
                 try:
+                    if not title or body or base_branch:
+                        sys.exit('Missing required arguments to create a pull request (title, body or base_branch)')
+
                     created_pull = my_repo.create_pull(title, base_branch, self.current_branch, body=body)
 
                     # created a pull request, returns url
@@ -156,9 +163,9 @@ def main():
     github_auth = GitHubApiAuth()
     api_token = github_auth.get_token()
 
-    localRepo = LocalRepo()
-    repo = localRepo.get_repo()
-    current_branch = localRepo.get_current_branch(repo)
+    local_repo = LocalRepo()
+    repo = local_repo.get_repo()
+    current_branch = local_repo.get_current_branch(repo)
 
     # Don't allow master branch to create a pull request
     if current_branch == 'master':
@@ -174,7 +181,8 @@ def main():
     publish.update_remote(remote_info['remote_name'])
     print('pushed to remote %s (%s)' % (remote_info['remote_name'], remote_info['remote_url']))
 
-    print(publish.create_pull(api_token, remote_info['repo_name'], publish_args.title, publish_args.body, publish_args.base))
+    print(publish.create_pull(api_token, remote_info['repo_name'],
+                              publish_args.title, publish_args.body, publish_args.base))
 
 if __name__ == "__main__":
     main()
