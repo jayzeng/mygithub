@@ -13,9 +13,10 @@ cd mygithub
 python setup.py install
 ```
 
-Install via pip (https://pypi.python.org/pypi/mygithub/)
+Install via pip or easy_install (https://pypi.python.org/pypi/mygithub/)
 ```bash
 (sudo) pip install mygithub
+(sudo) easy_install install mygithub
 ```
 
 ## Help & Usage
