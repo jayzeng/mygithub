@@ -31,7 +31,7 @@ To create a new pull request
 python git_publish.py -t 'gitignore' -b '## Check in gitignore'
 ```
 
-If a pull request already exists:
+If a pull request already exists, you may omit the arguments and it will push the new commits to the pending pull:
 ```bash
 [jayzeng] ~/Projects/mygithub] (prototype/publish)>  python git_publish.py
 pushed to remote origin (git@github.com:jayzeng/mygithub.git)
