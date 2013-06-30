@@ -16,6 +16,6 @@ setup(name='mygithub',
         "Topic :: Software Development :: Version Control"
     ],
     license='MIT',
-    keywords='distutils setuptools',
+    keywords='pip distutils setuptools',
     requires=["github3.py", "GitPython"]
 )

@@ -6,11 +6,15 @@ My GitHub productivity scripts
 git publish  - publish current branch to GitHub and creates a pull request
 
 ## Install
+Install via source:
 ```bash
 git clone git@github.com:jayzeng/mygithub.git
 cd mygithub
 python setup.py install
 ```
+
+Install via pip
+(sudo) pip install mygithub
 
 ## Help & Usage
 If you already have a GitHub API token, you can set it as environment variable.
