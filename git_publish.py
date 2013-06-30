@@ -140,7 +140,7 @@ class Publish(object):
 
                 # no pending pull requests
                 try:
-                    if not title or body or base_branch:
+                    if not (title and body and base_branch):
                         sys.exit('Missing required arguments to create a pull request (title, body or base_branch)')
 
                     created_pull = my_repo.create_pull(title, base_branch, self.current_branch, body=body)
