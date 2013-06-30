@@ -38,3 +38,6 @@ Thumbs.db
 
 # python compiled code
 *.pyc
+
+# python build files
+build
