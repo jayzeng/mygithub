@@ -1,0 +1,17 @@
+Self note on how to publish to PyPi (https://pypi.python.org/)
+
+Packaging
+- python setup.py sdist
+
+Registering
+- python setup.py register
+    - Register an account on PyPi
+    - Pick 1 (out of 4 options)
+    - Provide credential
+    - Credentials will be stored in ~/.pypirc
+
+Uploading
+- python setup.py sdist upload
+
+Resources:
+- https://jamiecurle.co.uk/blog/my-first-experience-adding-package-pypi/
