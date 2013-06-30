@@ -13,8 +13,10 @@ cd mygithub
 python setup.py install
 ```
 
-Install via pip
+Install via pip (https://pypi.python.org/pypi/mygithub/)
+```bash
 (sudo) pip install mygithub
+```
 
 ## Help & Usage
 If you already have a GitHub API token, you can set it as environment variable.
