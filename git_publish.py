@@ -142,8 +142,9 @@ class Publish(object):
                     if created_pull:
                         # open up pull request in browser
                         # @TODO add an option flag
+                        html_url = created_pull.html_url
                         subprocess.Popen(['open', html_url])
-                        return created_pull.html_url
+                        return html_url
                 except Exception,e:
                     if hasattr(e, 'errors'):
                         errors = e.errors.pop()
