@@ -55,8 +55,8 @@ class Publish(object):
         Parse command line args
         """
         parser = argparse.ArgumentParser()
-        parser.add_argument('-b', '--body', help='Pull request body (in markdown)', dest='body',required=True)
-        parser.add_argument('-t', '--title', help='Pull request title', dest='title',required=True)
+        parser.add_argument('-b', '--body', help='Pull request body (in markdown)', dest='body')
+        parser.add_argument('-t', '--title', help='Pull request title', dest='title')
         parser.add_argument('--base', help='Base branch', dest='base',default='master')
 
         return parser.parse_args()
