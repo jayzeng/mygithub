@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from github3 import login
 from git import Repo, GitDB
 

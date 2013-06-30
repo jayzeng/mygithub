@@ -5,6 +5,13 @@ My GitHub productivity scripts
 
 git publish  - publish current branch to GitHub and creates a pull request
 
+## Install
+```bash
+git clone git@github.com:jayzeng/mygithub.git
+cd mygithub
+python setup.py install
+```
+
 ## Help & Usage
 If you already have a GitHub API token, you can set it as environment variable.
 (See "Personal API Access Tokens" in https://github.com/settings/applications)
@@ -14,7 +21,7 @@ export GITHUB_API_TOKEN=<my-token>
 ```
 
 ```bash
-[jayzeng] ~/Projects/mygithub] (refactor)>  python gitpublish.py --help
+gitpublish.py --help
 usage: gitpublish.py [-h] [-b BODY] [-t TITLE] [--base BASE_BRANCH]
                       [--in-browser IN_BROWSER]
 
@@ -31,17 +38,17 @@ optional arguments:
 ## Example
 To create a new pull request
 ```bash
-python gitpublish.py -t 'gitignore' -b '## Check in gitignore'
+gitpublish.py -t 'gitignore' -b '## Check in gitignore'
 ```
 
 You may choose not to open created pull request in browser
 ```bash
-python gitpublish.py -t 'gitignore' -b '## Check in gitignore' --in-browser n
+gitpublish.py -t 'gitignore' -b '## Check in gitignore' --in-browser n
 ```
 
 If a pull request already exists, you can omit the arguments. It will push the new commits to the pending pull:
 ```bash
-[jayzeng] ~/Projects/mygithub] (prototype/publish)>  python gitpublish.py
+gitpublish.py
 pushed to remote origin (git@github.com:jayzeng/mygithub.git)
 A pull request already exists for <Head [jayzeng:prototype/publish]>.
 url: https://github.com/jayzeng/mygithub/issues/2
