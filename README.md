@@ -13,16 +13,19 @@ If you already have a GitHub API token, you can set it as environment variable.
 export GITHUB_API_TOKEN=<my-token>
 ```
 
-
 ```bash
-usage: git_publish.py [-h] -b BODY -t TITLE [--base BASE]
+[jayzeng] ~/Projects/mygithub] (refactor)>  python git_publish.py --help
+usage: git_publish.py [-h] [-b BODY] [-t TITLE] [--base BASE_BRANCH]
+                      [--in-browser IN_BROWSER]
 
 optional arguments:
   -h, --help            show this help message and exit
   -b BODY, --body BODY  Pull request body (in markdown)
   -t TITLE, --title TITLE
                         Pull request title
-  --base BASE           Base branch
+  --base BASE_BRANCH    Base branch
+  --in-browser IN_BROWSER
+                        Open created pull request in browser
 ```
 
 ## Example
