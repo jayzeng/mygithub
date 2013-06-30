@@ -14,8 +14,8 @@ export GITHUB_API_TOKEN=<my-token>
 ```
 
 ```bash
-[jayzeng] ~/Projects/mygithub] (refactor)>  python git_publish.py --help
-usage: git_publish.py [-h] [-b BODY] [-t TITLE] [--base BASE_BRANCH]
+[jayzeng] ~/Projects/mygithub] (refactor)>  python gitpublish.py --help
+usage: gitpublish.py [-h] [-b BODY] [-t TITLE] [--base BASE_BRANCH]
                       [--in-browser IN_BROWSER]
 
 optional arguments:
@@ -31,17 +31,17 @@ optional arguments:
 ## Example
 To create a new pull request
 ```bash
-python git_publish.py -t 'gitignore' -b '## Check in gitignore'
+python gitpublish.py -t 'gitignore' -b '## Check in gitignore'
 ```
 
 You may choose not to open created pull request in browser
 ```bash
-python git_publish.py -t 'gitignore' -b '## Check in gitignore' --in-browser n
+python gitpublish.py -t 'gitignore' -b '## Check in gitignore' --in-browser n
 ```
 
 If a pull request already exists, you can omit the arguments. It will push the new commits to the pending pull:
 ```bash
-[jayzeng] ~/Projects/mygithub] (prototype/publish)>  python git_publish.py
+[jayzeng] ~/Projects/mygithub] (prototype/publish)>  python gitpublish.py
 pushed to remote origin (git@github.com:jayzeng/mygithub.git)
 A pull request already exists for <Head [jayzeng:prototype/publish]>.
 url: https://github.com/jayzeng/mygithub/issues/2

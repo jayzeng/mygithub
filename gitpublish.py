@@ -25,9 +25,6 @@ class GitHubApiAuth(object):
             if 'GITHUB' in key.upper():
                 return local_env[key]
 
-        # Look in config
-        # To be implemented
-
         raise Exception('Please set GitHub API key (GITHUB_API_TOKEN) '\
                         'in environment or config')
 
@@ -156,10 +153,8 @@ class Publish(object):
                     created_pull = my_repo.create_pull(cmd_args.title, cmd_args.base_branch,
                                                        self.current_branch, body=cmd_args.body)
 
-                    # created a pull request, returns url
+                    # created a pull request, returns html url
                     if created_pull:
-                        # open up pull request in browser
-                        # @TODO add an option flag
                         html_url = created_pull.html_url
 
                         # Open in browser?
