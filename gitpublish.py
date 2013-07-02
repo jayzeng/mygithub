@@ -30,6 +30,9 @@ class GitHubApiAuth(object):
         raise Exception('Please set GitHub API key (GITHUB_API_TOKEN) '\
                         'in environment or config')
 
+    def get_gh(self, token):
+        return login(token=token)
+
 
 class LocalRepo(object):
     def get_repo(self):
@@ -47,6 +50,12 @@ class LocalRepo(object):
         repo - gitpython.Repo
         """
         return repo.active_branch.name
+
+class Remote(object):
+    def get_members(self, repo):
+        members = repo.iter_members()
+        return members
+
 
 class Publish(object):
     def __init__(self, repo, current_branch):
@@ -113,18 +122,17 @@ class Publish(object):
         """
         return origin_remote.push(self.current_branch)
 
-    def create_pull(self, token, repo_name, cmd_args):
+    def create_pull(self, github_login, token, repo_name, cmd_args):
         """
         Creates a pull request on GitHub
 
         Args:
+            github_login - github login instance
             token        - github api token
             repo_name    - local repository name
             cmd_args     - command line arguments
         Returns created pull request url
         """
-        github_login = login(token=token)
-
         # @TODO check github3.py to do a get repo instead of looping all repos
         repos = github_login.iter_repos()
 
@@ -173,6 +181,7 @@ class Publish(object):
 def main():
     github_auth = GitHubApiAuth()
     api_token = github_auth.get_token()
+    github_login = github_auth.get_gh(api_token)
 
     local_repo = LocalRepo()
     repo = local_repo.get_repo()
@@ -188,11 +197,19 @@ def main():
     # Retrieve remote info
     remote_info = publish.get_remote_info()
 
-    # Push current branch to remote
-    publish.update_remote(remote_info['remote_name'])
-    print('pushed to remote %s (%s)' % (remote_info['remote_name'], remote_info['remote_url']))
+    org = Remote()
+    for org in github_login.iter_orgs():
+        for team in org.iter_teams():
+            for member in team.iter_members():
+                print('Team: %s Member:%s' % (team, member))
+    #print(dir(github_login))
+    #print(org.get_members(github_login))
 
-    print(publish.create_pull(api_token, remote_info['repo_name'], publish_args))
+    # Push current branch to remote
+    #publish.update_remote(remote_info['remote_name'])
+    #print('pushed to remote %s (%s)' % (remote_info['remote_name'], remote_info['remote_url']))
+
+    #print(publish.create_pull(github_login, api_token, remote_info['repo_name'], publish_args))
 
 if __name__ == "__main__":
     main()
